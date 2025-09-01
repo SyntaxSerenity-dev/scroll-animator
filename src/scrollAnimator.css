@@ -1,0 +1,513 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                                                                                                   ║
+ * ║  ███████╗██╗   ██╗███╗   ██╗████████╗ █████╗ ██╗  ██╗███████╗█████╗██████╗ █████╗███╗   ██╗██╗████████╗██╗   ██╗  ║
+ * ║  ██╔════╝╚██╗ ██╔╝████╗  ██║╚══██╔══╝██╔══██╗╚██╗██╔╝██╔════╝██╔══╝██╔══██╗██╔══╝████╗  ██║██║╚══██╔══╝╚██╗ ██╔╝  ║
+ * ║  ███████╗ ╚████╔╝ ██╔██╗ ██║   ██║   ███████║ ╚███╔╝ ███████╗█████╗██████╔╝█████╗██╔██╗ ██║██║   ██║    ╚████╔╝   ║
+ * ║  ╚════██║  ╚██╔╝  ██║╚██╗██║   ██║   ██╔══██║ ██╔██╗ ╚════██║██╔══╝██╔══██╗██╔══╝██║╚██╗██║██║   ██║     ╚██╔╝    ║
+ * ║  ███████║   ██║   ██║ ╚████║   ██║   ██║  ██║██╔╝ ██╗███████║█████╗██║  ██║█████╗██║ ╚████║██║   ██║      ██║     ║
+ * ║  ╚══════╝   ╚═╝   ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚════╝╚═╝  ╚═╝╚════╝╚═╝  ╚═══╝╚═╝   ╚═╝      ╚═╝     ║
+ * ║                                R E L I A B I L I T Y   I N   E V E R Y   L I N E                                  ║
+ * ║                                              O F   C O D E                                                        ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ *
+ * File: scrollAnimator.css
+ *
+ * Description:
+ *
+ *  Advanced CSS framework for scroll-triggered animations with intelligent UX optimizations. Provides GPU-accelerated
+ *  transforms, adaptive performance settings, accessibility compliance, and comprehensive responsive design. Features
+ *  CSS custom properties for dynamic theming, optimized easing functions, and fallback support for older browsers.
+ *  Designed to work seamlessly with ScrollAnimator.js for creating smooth, performant scroll-based animations.
+ *
+ * Key Features:
+ *
+ *  - GPU-accelerated 3D transforms for smooth animations
+ *  - CSS custom properties for dynamic configuration
+ *  - Responsive design with mobile optimizations
+ *  - Accessibility compliance with reduced motion support
+ *  - Performance optimizations for different devices
+ *  - Fallback support for older browsers
+ *  - Predefined animation presets and easing functions
+ *
+ * Structure:
+ *
+ *  - CSS Custom Properties (root variables for configuration)
+ *  - Base Animation Classes (core animation functionality)
+ *  - Direction-Specific Animations (up, down, left, right, scale, rotate, fade)
+ *  - Velocity-Based Classes (fast-scroll, slow-scroll optimizations)
+ *  - Easing Presets (swift, smooth, snappy, bounce variations)
+ *  - Responsive Design (mobile and tablet optimizations)
+ *  - Accessibility Features (reduced motion support)
+ *  - Utility Classes (instant, force-animate, debug modes)
+ *  - Advanced Animations (slide-bounce, zoom-fade, diagonal)
+ *  - Stagger Groups (sequential animation delays)
+ *  - Loading States (skeleton, pulse animations)
+ *  - Performance Optimizations (GPU layers, content visibility)
+ *  - Browser Fallbacks (legacy browser support)
+ *
+ * Dependencies:
+ *
+ *  - ScrollAnimator.js for JavaScript functionality
+ *  - Modern browsers with CSS custom properties support
+ *  - GPU acceleration for optimal performance
+ *  - Intersection Observer API (handled by JavaScript)
+ *  - CSS transforms and transitions
+ *
+ * @package animation/css
+ * @category Styling Animation
+ * @version 2.1.0
+ * @since 2024-09-15
+ * @license MIT
+ * @author syntax serenity <fs.developerfullstack@gmail.com>
+*/
+/*********************************************************|
+|=========== SCROLL ANIMATOR CSS CONFIGURATION ==========|
+|********************************************************/
+
+  /* ==================================================
+   CSS CUSTOM PROPERTIES CONFIGURATION
+   ================================================== */
+   :root {
+     --scroll-anim-duration: 0.6s;         /* Reduced for faster response */
+     --scroll-anim-delay: 0s;               /* No delay by default */
+     --scroll-anim-timing: cubic-bezier(0.4, 0, 0.2, 1); /* Swift easing */
+     --scroll-anim-distance: 40px;          /* More subtle distance */
+    
+     /* NEW: Variables for different contexts */
+     --scroll-anim-fast-duration: 0.3s;    /* Duration for fast scroll */
+     --scroll-anim-mobile-duration: 0.4s;  /* Duration for mobile */
+     --scroll-anim-mobile-distance: 25px;  /* Distance for mobile */
+  }
+
+ /*********************************************************|
+ |=========== BASE ANIMATION CLASSES ====================|
+ |********************************************************/
+
+     /* ==================================================
+      OPTIMIZED BASE CLASS
+      ================================================== */
+     .scroll-animate {
+         /* Optimized transition with transform3d for GPU */
+         transition-property: opacity, transform;
+         transition-duration: var(--scroll-anim-duration);
+         transition-timing-function: var(--scroll-anim-timing);
+         transition-delay: var(--scroll-anim-delay);
+         
+         /* Critical performance optimizations */
+         will-change: opacity, transform;
+         backface-visibility: hidden;
+         -webkit-font-smoothing: antialiased;
+         -moz-osx-font-smoothing: grayscale;
+         transform-style: preserve-3d;           /* NEW: For smooth 3D animations */
+         
+         /* Initial state */
+         opacity: 0;
+         transform: translate3d(0, var(--scroll-anim-distance), 0); /* GPU accelerated */
+     }
+     
+     /* Optimized active state */
+     .scroll-animate.animate-in {
+         opacity: 1;
+         transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+         transition-delay: var(--scroll-anim-delay);
+     }
+     
+     /*******************************************************|
+     |=========== DIRECTION-SPECIFIC ANIMATIONS =============|
+     |*******************************************************/
+          
+     /* Animation from bottom to top (optimized) */
+     .scroll-animate.anim-up {transform: translate3d(0, var(--scroll-anim-distance), 0);}
+     .scroll-animate.anim-up.animate-in {transform: translate3d(0, 0, 0);}
+     
+     /* Animation from top to bottom (optimized) */
+     .scroll-animate.anim-down {transform: translate3d(0, calc(var(--scroll-anim-distance) * -1), 0);}
+     .scroll-animate.anim-down.animate-in {transform: translate3d(0, 0, 0);}
+     
+     /* Animation from right to left (optimized) */
+     .scroll-animate.anim-left {transform: translate3d(var(--scroll-anim-distance), 0, 0);}
+     .scroll-animate.anim-left.animate-in {transform: translate3d(0, 0, 0);}
+     
+     /* Animation from left to right (optimized) */
+     .scroll-animate.anim-right {transform: translate3d(calc(var(--scroll-anim-distance) * -1), 0, 0);}
+     .scroll-animate.anim-right.animate-in {transform: translate3d(0, 0, 0);}
+     
+     /* Scale animation (GPU accelerated) */
+     .scroll-animate.anim-scale {
+         transform: translate3d(0, 0, 0) scale(0.85);
+         opacity: 0;
+     }
+     
+     .scroll-animate.anim-scale.animate-in {
+         transform: translate3d(0, 0, 0) scale(1);
+         opacity: 1;
+     }
+     
+     /* Rotation animation (3D optimized) */
+     .scroll-animate.anim-rotate {
+         transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 8deg) scale(0.9);
+         opacity: 0;
+     }
+     
+     .scroll-animate.anim-rotate.animate-in {
+         transform: translate3d(0, 0, 0) rotate3d(0, 0, 1, 0deg) scale(1);
+         opacity: 1;
+     }
+     
+     /* Subtle fade animation */
+     .scroll-animate.anim-fade {
+         transform: translate3d(0, calc(var(--scroll-anim-distance) * 0.3), 0);
+         opacity: 0;
+     }
+     
+     .scroll-animate.anim-fade.animate-in {
+         transform: translate3d(0, 0, 0);
+         opacity: 1;
+     }
+     
+     /******************************************************|
+     |=========== VELOCITY-BASED UX CLASSES ================|
+     |******************************************************/
+     
+     /* Class automatically applied during fast scroll */
+     .scroll-animate.fast-scroll {
+         --scroll-anim-duration: var(--scroll-anim-fast-duration);
+         --scroll-anim-delay: 0s;
+         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* Swift */
+     }
+     
+     /* Class for high priority elements */
+     .scroll-animate.high-priority {
+         --scroll-anim-duration: 0.4s;
+         --scroll-anim-delay: 0s;
+     }
+     
+     /* Class for very slow scroll (smoother) */
+     .scroll-animate.slow-scroll {
+         --scroll-anim-duration: 0.8s;
+         transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth */
+     }
+     
+     /*********************************************************|
+     |=========== OPTIMIZED EASING PRESETS =================|
+     |********************************************************/
+     
+     .scroll-animate.ease-swift {transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);}
+     .scroll-animate.ease-smooth {transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);}
+     
+     .scroll-animate.ease-snappy {transition-timing-function: cubic-bezier(0.4, 0, 0.6, 1);}
+     .scroll-animate.ease-bounce-subtle {transition-timing-function: cubic-bezier(0.68, -0.25, 0.265, 1.25);}
+     
+     /******************************************************|
+     |=========== RESPONSIVE DESIGN OPTIMIZATIONS ==========|
+     |******************************************************/
+
+     /* Mobile optimizations */
+     @media (max-width: 768px) {
+         .scroll-animate {
+             --scroll-anim-duration: var(--scroll-anim-mobile-duration);
+             --scroll-anim-distance: var(--scroll-anim-mobile-distance);
+             /* Simplify complex transformations on mobile */
+         }
+         
+         /* Simplify complex animations */
+         .scroll-animate.anim-rotate {transform: translate3d(0, var(--scroll-anim-mobile-distance), 0) scale(0.95);}
+         .scroll-animate.anim-rotate.animate-in {transform: translate3d(0, 0, 0) scale(1);}
+     }
+     
+     /* Small mobile optimizations */
+     @media (max-width: 480px) {
+         .scroll-animate {
+             --scroll-anim-duration: 0.3s;
+             --scroll-anim-distance: 20px;
+         }
+         
+         /* Remove very complex animations */
+         .scroll-animate.anim-bounce,
+         .scroll-animate.anim-elastic {
+             animation: none !important;
+         }
+     }
+     
+     /******************************************************|
+     |=========== ACCESSIBILITY & USER PREFERENCES =========|
+     |******************************************************/
+     
+     /* Respect reduced motion preference */
+     @media (prefers-reduced-motion: reduce) {
+         .scroll-animate {
+             --scroll-anim-duration: 0.1s !important;
+             --scroll-anim-delay: 0s !important;
+             animation: none !important;
+             transition: opacity 0.1s ease !important;
+         }
+         
+         .scroll-animate.animate-in {
+             opacity: 1 !important;
+             transform: translate3d(0, 0, 0) scale(1) !important;
+         }
+         
+         /* Keep only opacity transition for accessibility */
+         .scroll-animate * {
+             animation: none !important;
+             transition: opacity 0.1s ease !important;
+         }
+     }
+     
+     /* For users who prefer reduced but not disabled animations */
+     @media (prefers-reduced-motion: no-preference) {
+         .scroll-animate.accessible {
+             --scroll-anim-duration: 0.8s;
+             --scroll-anim-distance: 30px;
+             transition-timing-function: ease-out;
+         }
+     }
+     
+     /******************************************************|
+     |=========== UTILITY CLASSES FOR FINE CONTROL =========|
+     |*****************************************************/
+     
+     /* Instant animation (for critical elements) */
+     .scroll-animate.instant {
+         --scroll-anim-duration: 0.1s;
+         --scroll-anim-delay: 0s;
+         transition-timing-function: steps(1, end);
+     }
+     
+     /* Force animation (useful for debug) */
+     .scroll-animate.force-animate {
+         opacity: 1 !important;
+         transform: translate3d(0, 0, 0) scale(1) !important;
+         transition: none !important;
+     }
+     
+     /* Pause animation */
+     .scroll-animate.pause-animation {
+         animation-play-state: paused;
+         transition: none;
+     }
+     
+     /*********************************************************|
+     |=========== VISUAL DEBUG INDICATORS ==================|
+     |********************************************************/
+     
+     /* Debug mode - show non-animated elements */
+     .scroll-animator-debug .scroll-animate:not(.animate-in) {
+         outline: 2px dashed rgba(255, 0, 0, 0.5);
+         background-color: rgba(255, 0, 0, 0.1);
+     }
+     
+     .scroll-animator-debug .scroll-animate.animate-in {
+         outline: 2px solid rgba(0, 255, 0, 0.5);
+         background-color: rgba(0, 255, 0, 0.1);
+     }
+     
+     /*********************************************************|
+     |=========== ADVANCED ANIMATIONS FOR SPECIAL CASES ====|
+     |********************************************************/
+     
+     /* Slide with subtle bounce */
+     .scroll-animate.anim-slide-bounce {
+         transform: translate3d(0, var(--scroll-anim-distance), 0);
+         opacity: 0;
+     }
+     
+     .scroll-animate.anim-slide-bounce.animate-in {
+         opacity: 1;
+         animation: slideBounce var(--scroll-anim-duration) cubic-bezier(0.68, -0.25, 0.265, 1.25);
+         transform: translate3d(0, 0, 0);
+     }
+     
+     @keyframes slideBounce {
+         0% {
+             opacity: 0;
+             transform: translate3d(0, 40px, 0);
+         }
+         60% {
+             opacity: 1;
+             transform: translate3d(0, -8px, 0);
+         }
+         80% {
+             transform: translate3d(0, 2px, 0);
+         }
+         100% {
+             opacity: 1;
+             transform: translate3d(0, 0, 0);
+         }
+     }
+     
+     /* Optimized zoom with fade */
+     .scroll-animate.anim-zoom-fade {
+         transform: translate3d(0, 0, 0) scale(0.8);
+         opacity: 0;
+     }
+     
+     .scroll-animate.anim-zoom-fade.animate-in {
+         opacity: 1;
+         transform: translate3d(0, 0, 0) scale(1);
+     }
+     
+     /* Smooth diagonal slide */
+     .scroll-animate.anim-diagonal {
+         transform: translate3d(-30px, var(--scroll-anim-distance), 0);
+         opacity: 0;
+     }
+     
+     .scroll-animate.anim-diagonal.animate-in {
+         transform: translate3d(0, 0, 0);
+         opacity: 1;
+     }
+     
+     /*********************************************************|
+     |=========== OPTIMIZED STAGGER GROUPS =================|
+     |********************************************************/
+     
+     /* .scroll-animate-group { */
+         /* Container for groups with staggered delay */
+     /* } */
+     
+     /* Optimized delays for groups */
+     .scroll-animate-group .scroll-animate:nth-child(1) { --scroll-anim-delay: 0s; }
+     .scroll-animate-group .scroll-animate:nth-child(2) { --scroll-anim-delay: 0.08s; }
+     .scroll-animate-group .scroll-animate:nth-child(3) { --scroll-anim-delay: 0.16s; }
+     .scroll-animate-group .scroll-animate:nth-child(4) { --scroll-anim-delay: 0.24s; }
+     .scroll-animate-group .scroll-animate:nth-child(5) { --scroll-anim-delay: 0.32s; }
+     .scroll-animate-group .scroll-animate:nth-child(6) { --scroll-anim-delay: 0.40s; }
+     
+     /* Group with reduced delay for fast scroll */
+     .scroll-animate-group.fast-stagger .scroll-animate:nth-child(n) {
+         --scroll-anim-delay: calc(var(--scroll-anim-delay) * 0.5);
+     }
+     
+     /*********************************************************|
+     |=========== LOADING AND CARRIAGE STATES ==============|
+     |********************************************************/
+     
+     /* Skeleton loading state */
+     .scroll-animate.loading-skeleton {
+         background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+         background-size: 200% 100%;
+         animation: skeleton-loading 1.5s infinite;
+         opacity: 1;
+     }
+     
+     @keyframes skeleton-loading {
+         0% {
+             background-position: 200% 0;
+         }
+         100% {
+             background-position: -200% 0;
+         }
+     }
+     
+     /* Loading state with pulse */
+     .scroll-animate.loading-pulse {
+         animation: pulse 1.5s infinite;
+         opacity: 0.6;
+     }
+     
+     @keyframes pulse {
+         0%, 100% {
+             opacity: 0.6;
+         }
+         50% {
+             opacity: 0.3;
+         }
+     }
+     
+     /******************************************************|
+     |=========== OPTIMIZED COMBINATIONS FOR SPECIFIC UX ===|
+     |******************************************************/
+     
+     
+     /* Product cards (e-commerce) */
+     .scroll-animate.product-card {
+         --scroll-anim-duration: 0.4s;
+         transform: translate3d(0, 20px, 0) scale(0.98);
+         opacity: 0;
+     }
+     
+     .scroll-animate.product-card.animate-in {
+         transform: translate3d(0, 0, 0) scale(1);
+         opacity: 1;
+         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+     }
+     
+     /* Content text (articles, blogs) */
+     .scroll-animate.content-text {
+         --scroll-anim-duration: 0.6s;
+         --scroll-anim-distance: 15px;
+         transform: translate3d(0, var(--scroll-anim-distance), 0);
+         opacity: 0;
+     }
+     
+     .scroll-animate.content-text.animate-in {
+         transform: translate3d(0, 0, 0);
+         opacity: 1;
+         transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+     }
+     
+     /* Hero sections */
+     .scroll-animate.hero-element {
+         --scroll-anim-duration: 0.8s;
+         --scroll-anim-distance: 60px;
+         transform: translate3d(0, var(--scroll-anim-distance), 0) scale(0.95);
+         opacity: 0;
+     }
+     
+     .scroll-animate.hero-element.animate-in {
+         transform: translate3d(0, 0, 0) scale(1);
+         opacity: 1;
+         transition-timing-function: cubic-bezier(0.68, -0.25, 0.265, 1.25);
+     }
+     
+     /******************************************************|
+     |=========== CRITICAL PERFORMANCE OPTIMIZATIONS =======|
+     |******************************************************/
+     
+     /* GPU layer isolation */
+     .scroll-animate {
+         isolation: isolate;
+         contain: layout style paint;
+     }
+     
+     /* Optimization for elements outside viewport */
+     .scroll-animate:not(.animate-in) {
+         content-visibility: auto;
+         contain-intrinsic-size: auto 100px;
+     }
+     
+     /* Prefetch for nearby elements */
+     .scroll-animate.preload {will-change: transform, opacity;}
+     
+     /* Cleanup after animation */
+     .scroll-animate.animate-in.animation-complete {will-change: auto;}
+     
+     /*********************************************************|
+     |=========== FALLBACKS FOR OLDER BROWSERS ============|
+     |********************************************************/
+     
+     /* Fallback for browsers without transform3d support */
+     @supports not (transform: translate3d(0, 0, 0)) {
+         .scroll-animate {
+             transform: translateY(var(--scroll-anim-distance));
+         }
+         
+         .scroll-animate.animate-in {
+             transform: translateY(0) translateX(0) scale(1) rotate(0deg);
+         }
+     }
+     
+     /* Fallback for browsers without CSS custom properties */
+     @supports not (color: var(--test)) {
+         .scroll-animate {
+             transition-duration: 0.6s;
+             transition-timing-function: ease-out;
+         }
+         
+         .scroll-animate.fast-scroll {
+             transition-duration: 0.3s;
+         }
+     }
