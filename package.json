@@ -1,0 +1,29 @@
+{
+ "name": "@SyntaxSerenity-dev/scroll-animator",
+ "version": "2.0.0",
+ "description": "Advanced scroll-triggered animation system with intelligent UX optimizations",
+ "main": "dist/scrollAnimator.js",
+ "module": "src/scrollAnimator.js",
+ "license": "MIT",
+ "author": {
+     "name": "Syntax Serenity",
+     "email": "fs.developerfullstack@gmail.com",
+     "url": "https://syntaxserenity.dev"
+ },
+ "repository": {
+     "type": "git",
+     "url": "https://github.com/SyntaxSerenity-dev/scroll-animator.git"
+ },
+ "keywords": [
+     "scroll",
+     "animation",
+     "intersection-observer",
+     "performance",
+     "javascript",
+     "library"
+ ],
+ "bugs": {
+     "url": "https://github.com/SyntaxSerenity-dev/scroll-animator/issues"
+ },
+ "homepage": "https://github.com/SyntaxSerenity-dev/scroll-animator#readme"
+}
