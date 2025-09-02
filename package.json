@@ -1,6 +1,6 @@
 {
  "name": "@SyntaxSerenity-dev/scroll-animator",
- "version": "2.0.0",
+ "version": "2.1.0",
  "description": "Advanced scroll-triggered animation system with intelligent UX optimizations",
  "main": "dist/scrollAnimator.js",
  "module": "src/scrollAnimator.js",
@@ -26,4 +26,5 @@
      "url": "https://github.com/SyntaxSerenity-dev/scroll-animator/issues"
  },
  "homepage": "https://github.com/SyntaxSerenity-dev/scroll-animator#readme"
+
 }
